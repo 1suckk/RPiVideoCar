@@ -47,6 +47,7 @@ app = Flask(__name__)
 
 GPIO.setmode(GPIO.BCM)      
 
+#GPIO 핀 정의
 TRIG = 23                                  
 ECHO = 24                                  
 
@@ -75,7 +76,8 @@ GPIO.output(LEFT_PWM, 0)
 LEFT_MOTOR = GPIO.PWM(LEFT_PWM, 100)
 LEFT_MOTOR.start(0)
 LEFT_MOTOR.ChangeDutyCycle(0)
- 
+
+#초음파 센서로 거리 측정하는 코드
 def getDistance():
   GPIO.output(TRIG, GPIO.LOW)                 
   time.sleep(1)                            
@@ -96,12 +98,14 @@ def getDistance():
   distance = round(distance, 2)           
  
   return distance
- 
+
+#전진, 후진, 펄스 폭 제어에 대한 부분 정의
 def rightMotor(forward, backward, pwm):
   GPIO.output(RIGHT_FORWARD,forward)
   GPIO.output(RIGHT_BACKWARD,backward)
   RIGHT_MOTOR.ChangeDutyCycle(pwm)
- 
+
+#전진, 후진, 펄스 폭 제어에 대한 부분 정의
 def leftMotor(forward, backward, pwm):
   GPIO.output(LEFT_FORWARD,forward)
   GPIO.output(LEFT_BACKWARD,backward)
@@ -113,20 +117,20 @@ def forward():
     time.sleep(1)
 
 def left():
-    rightMotor(0, 0, 0)
-    leftMotor(1, 0, 70)
+    rightMotor(1, 0, 70) #왼쪽 바퀴가 멈추고 오른쪽이 회전해야 좌회전
+    leftMotor(0, 0, 0)
     time.sleep(0.3)
 
 def right():
-    rightMotor(1, 0, 70)
-    leftMotor(0, 0, 0)
+    rightMotor(0, 0, 0)
+    leftMotor(1, 0, 70) #오른쪽 바퀴가 멈추고 왼쪽이 회전해야 우회전
     time.sleep(0.3)
 
 def stop():
     rightMotor(0, 0, 0)
     leftMotor(0, 0, 0)
 
-@app.route("/<command>")
+@app.route("/<command>") #라우팅을 진행
 def action(command):
     distance_value = getDistance()
     if command == "F":
@@ -154,7 +158,7 @@ def show(camera):
     while True:
         frame = camera.getStreaming()
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') #프레임을 구별하는 헤더
 
 
 @app.route('/show')
