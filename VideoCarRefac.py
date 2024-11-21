@@ -26,9 +26,13 @@ class Camera:
     @classmethod
     def streaming(c):
         picam2 = Picamera2()
-        config = picam2.create_video_configuration(main={"size": (320, 240)})
-        picam2.configure(config)
-        picam2.start_preview(Preview.QTGL)
+
+        # 카메라 화면 180도 회전
+        config = picam2.create_video_configuration(
+            main={"size": (320, 240)},
+            transform=transform  # 여기에서 Transform 설정
+        )
+        picam2.configure(config) 
 
         picam2.start()
 
