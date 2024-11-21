@@ -28,6 +28,8 @@ class Camera:
         picam2 = Picamera2()
 
         # 카메라 화면 180도 회전
+        transform = Transform(hflip=True, vflip=True)
+        
         config = picam2.create_video_configuration(
             main={"size": (320, 240)},
             transform=transform  # 여기에서 Transform 설정
