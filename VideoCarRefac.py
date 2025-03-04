@@ -164,7 +164,7 @@ def show(camera):
     while True:
         frame = camera.getStreaming()
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') #프레임을 구별하는 헤더
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') #프레임을 구별하는 헤더, jpeg가 부하를 적게 준다
 
 
 @app.route('/show')
